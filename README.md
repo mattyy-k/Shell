@@ -91,20 +91,10 @@ Pipeline internals:
 
 ### Build
 
----
-
-## 🛠️ Build & Run
-
-### Requirements
-- **C++17**
-- **GNU Readline**
-- Linux / macOS / WSL
-
-### Build
-
 g++ -std=gnu++17 -lreadline main.cpp -o shell
 
 ###RUN
+
 ./shell
 
 
