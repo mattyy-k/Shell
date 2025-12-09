@@ -1,151 +1,141 @@
-anax-shell
-
-A full Unix-like shell written from scratch in C++.
+# anax-shell  
+*A full Unix-like shell written from scratch in C++.*
 
 This project is a ground-up implementation of a functioning shell, featuring its own parser, execution engine, pipeline subsystem, history engine, tab completion, I/O redirection system, and process model.
 
-No libraries except POSIX and GNU Readline.
+No libraries except **POSIX** and **GNU Readline**.
 
-Features
-Command Parsing & Tokenization
+---
 
-Full tokenizer supporting:
+## ⚙️ Features
 
-Single quotes '...'
+### 🧩 Command Parsing & Tokenization
+- Full tokenizer supporting:
+  - Single quotes `'...'`
+  - Double quotes `"..."` with escape semantics
+  - Backslash escaping (Bash-compatible)
+  - Multiline input continuation
+- Handles whitespace, tabs, and tricky shell edge cases.
 
-Double quotes "..." with correct escape semantics
+---
 
-Backslash escaping (Bash-compatible)
+### 📦 Built-in Commands
+- `cd`
+- `exit`
+- `echo`
+- `pwd`
+- `type`
+- `history` (`-r`, `-w`, `-a`)
 
-Multiline input continuation
+---
 
-Handles whitespace, tabs, and complex shell edge cases.
-
-Built-in Commands
-
-cd
-
-exit
-
-echo
-
-pwd
-
-type
-
-history (with -r, -w, -a)
-
-I/O Redirection
-
+### 🔁 I/O Redirection
 Supports:
+- `>` and `1>` — overwrite stdout  
+- `>>` and `1>>` — append stdout  
+- `2>` — redirect stderr  
+- `2>>` — append stderr  
 
-> and 1> (overwrite stdout)
+Implemented manually using:
+- `open()`
+- `dup2()`
+- Mode flags (O_TRUNC, O_APPEND, O_CREAT, etc.)
 
->> and 1>> (append stdout)
+---
 
-2> (stderr redirection)
-
-2>> (stderr append)
-
-Implemented via:
-
-open()
-
-dup2()
-
-Proper file mode handling
-
-Pipelines
-
+### 🚰 Pipelines
 Supports:
+- Two-stage: `cmd1 | cmd2`
+- Multi-stage: `cmd1 | cmd2 | cmd3 | ...`
+- Builtins inside pipelines: `echo hi | wc`
 
-Two-stage pipelines (cmd1 | cmd2)
+Pipeline internals:
+- Dynamic `pipe[N]` allocation  
+- N-child fork loop  
+- Proper closing of unused pipe ends  
+- Cleanup via `waitpid()`  
 
-Multi-stage pipelines (cmd1 | cmd2 | cmd3 | ...)
+---
 
-Builtins inside pipelines (echo hi | wc)
+### 🕘 History Engine
+- Stores every command in memory  
+- `history -r <file>` → load  
+- `history -w <file>` → write  
+- `history -a <file>` → append (new entries only)
+- Honors the `HISTFILE` environment variable  
+- Auto-save on exit  
 
-Internals:
+---
 
-Dynamic pipe array
+### 🔮 Tab Completion (Readline)
+- Autocompletes builtins
+- Autocompletes executables from `$PATH`
+- Custom generator function using Readline APIs
 
-N-child fork loop
+---
 
-Correct closing of unused pipe ends
+### 👥 Process Model
+- Full fork/exec execution engine
+- Correct handling of builtins vs external programs
+- Parent-only exit
+- Correct environment + FD inheritance  
 
-Final process cleanup via waitpid
+---
 
-History Engine
+## 🏗️ Architecture Overview
 
-In-memory tracking of every command
-
-history -r <file> → load
-
-history -w <file> → overwrite-save
-
-history -a <file> → append new entries only
-
-HISTFILE environment variable support
-
-Auto-save on exit
-
-Tab Completion
-
-Using GNU Readline:
-
-Autocompletes builtins (echo, exit, etc.)
-
-Autocompletes executables from $PATH
-
-Custom generator function
-
-Process Model
-
-Fork/exec execution engine
-
-Distinguishes between builtins and external programs
-
-Parent-only exit
-
-Proper environment inheritance
-
-Architecture Overview
 ┌────────────┐
-│   Input    │  ← readline()
+│ Input │ ← readline()
 └─────┬──────┘
-      │
+│
 ┌─────▼──────┐
-│ Tokenizer  │  ← quotes, escapes, multiline
+│ Tokenizer │ ← quotes, escapes, multiline rules
 └─────┬──────┘
-      │
+│
 ┌─────▼──────┐
-│  Parser    │  ← pipes, redirects, builtins
+│ Parser │ ← pipes, redirects, builtins
 └─────┬──────┘
-      │
+│
 ┌─────▼──────────────────────────┐
-│ Execution Engine               │
-│ - Builtins                     │
-│ - Fork/exec external commands  │
-│ - Redirects                    │
-│ - Pipelines                    │
+│ Execution Engine │
+│ • Builtins │
+│ • Fork/exec external commands │
+│ • Redirections │
+│ • Pipelines │
 └───────────────────────────────┘
 
-Build & Run
-Requirements
+---
 
-C++17 or later
+## 🛠️ Build & Run
 
-GNU Readline
+### Requirements
+- **C++17**
+- **GNU Readline**
+- Linux / macOS / WSL
 
-Linux/macOS/WSL
+### Build
 
-Build
+---
+
+## 🛠️ Build & Run
+
+### Requirements
+- **C++17**
+- **GNU Readline**
+- Linux / macOS / WSL
+
+### Build
+
 g++ -std=gnu++17 -lreadline main.cpp -o shell
 
-Run
+###RUN
 ./shell
 
-Example Usage
+
+---
+
+## 📜 Example Usage
+
 $ echo hello world
 hello world
 
@@ -161,50 +151,38 @@ exit is a shell builtin
 
 $ history -a history.txt
 
-What I Learned
 
-POSIX process control (fork, execvp, waitpid)
+---
 
-File descriptor manipulation (dup2, open)
+## 📚 What I Learned
+- POSIX process control (`fork`, `execvp`, `waitpid`)
+- File descriptor manipulation (`open`, `dup2`)
+- Pipe-based IPC
+- Mini-language parser design
+- Handling quoting and escaping
+- Readline integration
+- Shell architecture fundamentals
 
-Pipe-based IPC
+---
 
-Mini language parsing design
+## 🚀 Planned Upgrades
+- Job control (`fg`, `bg`, `&`, Ctrl+Z)
+- Shell scripting (variables, loops, conditionals)
+- Terminal emulator frontend
+- Plugin / extension architecture
+- Better diagnostics
 
-Handling shell quoting and escaping rules
+---
 
-Building a REPL
+## 🧠 Why This Project Matters
+This project demonstrates strong systems-level understanding:
 
-Readline integration
+- Low-level Linux APIs  
+- Process lifecycle management  
+- IPC and pipelines  
+- Tokenization and parsing  
+- Real shell semantics  
+- Readline-based UX  
 
-Implementing real shell semantics
 
-Planned Upgrades
-
-Job control (fg/bg/& and Ctrl+Z)
-
-Shell scripting (variables, loops, conditionals)
-
-Terminal emulator frontend
-
-Plugin architecture
-
-Better error messages
-
-Why This Project Matters
-
-This shell is a real systems project demonstrating understanding of:
-
-Low-level Linux APIs
-
-Processes, IPC, and piping
-
-Tokenization and parsing
-
-File descriptors and redirection
-
-Unix shell semantics
-
-Readline integration
-
-Anyone reading this repository can immediately see depth in OS-level engineering.
+---
