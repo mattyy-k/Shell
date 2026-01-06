@@ -1,4 +1,4 @@
-# anax-shell  
+# Shell  
 *A full Unix-like shell written from scratch in C++.*
 
 This project is a ground-up implementation of a functioning shell, featuring its own parser, execution engine, pipeline subsystem, history engine, tab completion, I/O redirection system, and process model.
