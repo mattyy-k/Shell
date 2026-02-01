@@ -7,9 +7,9 @@ No libraries except **POSIX** and **GNU Readline**.
 
 ---
 
-## ⚙️ Features
+## Features
 
-### 🧩 Command Parsing & Tokenization
+### Command Parsing & Tokenization
 - Full tokenizer supporting:
   - Single quotes `'...'`
   - Double quotes `"..."` with escape semantics
@@ -19,7 +19,7 @@ No libraries except **POSIX** and **GNU Readline**.
 
 ---
 
-### 📦 Built-in Commands
+### Built-in Commands
 - `cd`
 - `exit`
 - `echo`
@@ -29,7 +29,7 @@ No libraries except **POSIX** and **GNU Readline**.
 
 ---
 
-### 🔁 I/O Redirection
+### I/O Redirection
 Supports:
 - `>` and `1>` — overwrite stdout  
 - `>>` and `1>>` — append stdout  
@@ -43,7 +43,7 @@ Implemented manually using:
 
 ---
 
-### 🚰 Pipelines
+### Pipelines
 Supports:
 - Two-stage: `cmd1 | cmd2`
 - Multi-stage: `cmd1 | cmd2 | cmd3 | ...`
@@ -57,7 +57,7 @@ Pipeline internals:
 
 ---
 
-### 🕘 History Engine
+### History Engine
 - Stores every command in memory  
 - `history -r <file>` → load  
 - `history -w <file>` → write  
@@ -67,14 +67,14 @@ Pipeline internals:
 
 ---
 
-### 🔮 Tab Completion (Readline)
+### Tab Completion (Readline)
 - Autocompletes builtins
 - Autocompletes executables from `$PATH`
 - Custom generator function using Readline APIs
 
 ---
 
-### 👥 Process Model
+### Process Model
 - Full fork/exec execution engine
 - Correct handling of builtins vs external programs
 - Parent-only exit
@@ -82,7 +82,7 @@ Pipeline internals:
 
 ---
 
-## 🛠️ Build & Run
+## Build & Run
 
 ### Requirements
 - **C++17**
@@ -100,7 +100,7 @@ g++ -std=gnu++17 -lreadline main.cpp -o shell
 
 ---
 
-## 📜 Example Usage
+## Example Usage
 
 $ echo hello world
 hello world
@@ -120,7 +120,7 @@ $ history -a history.txt
 
 ---
 
-## 📚 What I Learned
+## What I Learned
 - POSIX process control (`fork`, `execvp`, `waitpid`)
 - File descriptor manipulation (`open`, `dup2`)
 - Pipe-based IPC
@@ -131,7 +131,7 @@ $ history -a history.txt
 
 ---
 
-## 🚀 Planned Upgrades
+## Planned Upgrades
 - Job control (`fg`, `bg`, `&`, Ctrl+Z)
 - Shell scripting (variables, loops, conditionals)
 - Terminal emulator frontend
@@ -140,7 +140,7 @@ $ history -a history.txt
 
 ---
 
-## 🧠 Why This Project Matters
+## Why This Project Matters
 This project demonstrates strong systems-level understanding:
 
 - Low-level Linux APIs  
