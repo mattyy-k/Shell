@@ -93,7 +93,7 @@ Pipeline internals:
 
 g++ -std=gnu++17 -lreadline main.cpp -o shell
 
-###RUN
+### RUN
 
 ./shell
 
